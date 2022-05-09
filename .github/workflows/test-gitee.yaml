@@ -17,10 +17,13 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: 'lts/*'
+      - name: set nameserver
+        run: |
+          sudo sed -i "1inameserver 8.8.8.8" /etc/resolv.conf
+          ping gitee.com -c 5
       - name: Install dependencies
         run: |
           npm install -g ts-node typescript
-          yarn
       - name: Download BiliTools
         run: |
           mkdir temp
