@@ -31,7 +31,7 @@ async function login(page: Page): Promise<boolean> {
     await page.type('#user_password', input.password);
     core.debug('click login button');
     await Promise.all([
-      page.waitForNavigation(),
+      page.waitForNavigation({ timeout: 0 }),
       page.evaluate(() => {
         document.querySelector<HTMLButtonElement>('.field input[type="submit"]')?.click();
       }),
@@ -69,11 +69,14 @@ async function createRelease(page: Page): Promise<void> {
     }
     await uploadFile(page);
     core.debug('uploaded file');
-    await page.waitForSelector('#btn-submit-release');
+    await page.waitForSelector('#btn-submit-release', { timeout: 0 });
     const btn = await page.$('#btn-submit-release');
     await page.waitForTimeout(4000);
     core.debug('start submitting');
-    await Promise.all([page.waitForNavigation(), page.evaluate(sub => sub.click(), btn)]);
+    await Promise.all([
+      page.waitForNavigation({ timeout: 0 }),
+      page.evaluate(sub => sub.click(), btn),
+    ]);
     core.info('created release');
   } catch (error) {
     if (error instanceof Error) {
@@ -86,7 +89,7 @@ async function createRelease(page: Page): Promise<void> {
 /** 上传文件 */
 async function uploadFile(page: Page): Promise<void> {
   const [fileChooser] = await Promise.all([
-    page.waitForFileChooser(),
+    page.waitForFileChooser({ timeout: 0 }),
     page.click('#releaseDropzone'),
   ]);
   const filePaths = input.files.map(file => path.resolve(`./${dir}`, file));
