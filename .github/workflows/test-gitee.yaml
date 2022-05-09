@@ -20,6 +20,7 @@ jobs:
       - name: set nameserver
         run: |
           sudo sed -i "1inameserver 8.8.8.8" /etc/resolv.conf
+          nslookup gitee.com
           ping gitee.com -c 5
       - name: Install dependencies
         run: |
