@@ -8,6 +8,9 @@ jobs:
     if: github.repository == 'catlair/BiliTools'
     runs-on: ubuntu-latest
     environment: Build
+    env:
+      GITEE_USERNAME: ${{ secrets.GITEE_USERNAME }}
+      GITEE_PASSWORD: ${{ secrets.GITEE_PASSWORD }}
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -20,4 +23,3 @@ jobs:
           npm install -g ts-node typescript
       - name: Run tools
         run: ts-node tools/download.ts && ts-node tools/giteeRelease.ts
-        
